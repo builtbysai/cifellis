@@ -122,7 +122,7 @@
       } else if (data.status === 'completed'){
         note.innerHTML = (data.orderType === 'delivery') ? 'Delivered. Enjoy!' : 'Ready and picked up. Enjoy!';
       } else if (data.status === 'ready'){
-        note.innerHTML = (data.orderType === 'delivery') ? 'Ready — waiting for a driver.' : '<b>Ready for pickup now.</b>';
+        note.innerHTML = (data.orderType === 'delivery') ? 'Ready. Waiting for a driver.' : '<b>Ready for pickup now.</b>';
       } else if (data.scheduledFor){
         note.innerHTML = `Scheduled for ${escapeHtml(new Date(data.scheduledFor).toLocaleString([], { weekday:'short', month:'short', day:'numeric', hour:'numeric', minute:'2-digit' }))}.`;
       } else {
@@ -140,7 +140,7 @@
     const sb = client();
     const msg = document.getElementById('msg');
     if (!sb){
-      if (!silent){ msg.textContent = 'Order status is not connected right now — please try again later.'; msg.className = 'msg error'; }
+      if (!silent){ msg.textContent = 'Order status is not connected right now. Please try again later.'; msg.className = 'msg error'; }
       return;
     }
     const { data, error } = await sb.rpc('order_status_lookup', { p_ticket: ticket, p_phone: phone });
@@ -150,7 +150,7 @@
     }
     if (!data){
       if (!silent){
-        msg.textContent = "Couldn't find an order matching that ticket and phone number — double-check both and try again.";
+        msg.textContent = "Couldn't find an order matching that ticket and phone number. Double-check both and try again.";
         msg.className = 'msg error';
       }
       return;

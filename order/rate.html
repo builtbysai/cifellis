@@ -102,7 +102,7 @@
       return;
     }
     if (typeof window.supabase === 'undefined' || !window.SUPABASE_URL || !window.SUPABASE_ANON_KEY){
-      msg.textContent = 'Ratings are not connected right now — please try again later.';
+      msg.textContent = 'Ratings are not connected right now. Please try again later.';
       msg.className = 'msg error';
       return;
     }
@@ -120,7 +120,7 @@
       return;
     }
     if (!data){
-      msg.textContent = "Couldn't find a completed delivery matching that ticket and phone number — or it's already been rated.";
+      msg.textContent = "Couldn't find a completed delivery matching that ticket and phone number, or it's already been rated.";
       msg.className = 'msg error';
       btn.disabled = false;
       btn.textContent = 'Submit Rating';

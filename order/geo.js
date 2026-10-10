@@ -138,7 +138,7 @@ function wireDeliveryLookup(inputEl, resultEl, onResult, checkBtnEl){
     if (myRequest !== requestId) return; // superseded by a newer click
     lastCheckedValue = value.trim();
     if (!result){
-      resultEl.textContent = "Couldn't verify that address — you can still submit, we'll call to confirm.";
+      resultEl.textContent = "Couldn't verify that address. You can still submit; we'll call to confirm.";
       if (onResult) onResult(null);
       return;
     }
@@ -147,7 +147,7 @@ function wireDeliveryLookup(inputEl, resultEl, onResult, checkBtnEl){
       if (onResult) onResult(result);
       return;
     }
-    const farNote = result.miles > 8 ? ' — that\'s outside our usual delivery range, we may need to call you.' : '';
+    const farNote = result.miles > 8 ? '. That\'s outside our usual delivery range; we may need to call you.' : '';
     resultEl.textContent = `~${result.miles} mi from the shop, about ${result.minutes} min drive${farNote}`;
     if (onResult) onResult(result);
   });

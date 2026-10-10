@@ -434,7 +434,7 @@
    menu_config above -- if the table's missing or the fetch fails, the
    kiosk behaves exactly as if online ordering were never pausable. */
 let ORDERS_PAUSED = false;
-let PAUSE_MESSAGE = "We're not accepting online orders right now — please call the shop to place your order.";
+let PAUSE_MESSAGE = "We're not accepting online orders right now. Please call the shop to place your order.";
 let RECEIPT_MESSAGE = "Thank you for your order!\nPay in person at pickup or delivery.";
 
 function applyStoreSettings(row){
@@ -706,7 +706,7 @@ async function applyPromoCode(mode){
   const code = (codeInput.value || '').trim();
   const phone = (phoneInput.value || '').trim();
   if (!code){ statusEl.textContent = 'Enter a code first.'; statusEl.style.color = 'var(--bad)'; return; }
-  if (!phone){ statusEl.textContent = 'Enter your phone number above first — codes are tied to it.'; statusEl.style.color = 'var(--bad)'; return; }
+  if (!phone){ statusEl.textContent = 'Enter your phone number above first. Codes are tied to it.'; statusEl.style.color = 'var(--bad)'; return; }
   const db = App.db || await getDb();
   if (!db){ statusEl.textContent = 'Not connected to the database.'; statusEl.style.color = 'var(--bad)'; return; }
   const btn = document.getElementById(`promoapply-${mode}`);
@@ -828,7 +828,7 @@ async function submitCustomerOrder(){
   // redemption no longer matches who's actually placing this order.
   if (orderCtx.promoCode && orderCtx.promoPhone !== phone){
     removeAppliedPromo('customer');
-    showToast('Phone number changed since applying your promo code — please re-apply it.');
+    showToast('Phone number changed since applying your promo code. Please re-apply it.');
     return;
   }
   const submitBtn = document.getElementById('submit-customer');
@@ -1014,7 +1014,7 @@ function showAccountModal(){
     <div class="modal-card">
       <button class="modal-close" id="accountModalClose" aria-label="Close">&times;</button>
       <h3>Your Account</h3>
-      <p>Optional — you can always order without one. Creating an account saves your order history and details for next time.</p>
+      <p>Optional. You can always order without one. Creating an account saves your order history and details for next time.</p>
       <div class="modal-tabs">
         <button type="button" data-tab="signin" aria-pressed="true">Sign In</button>
         <button type="button" data-tab="signup" aria-pressed="false">Create Account</button>
@@ -1068,7 +1068,7 @@ function renderAccountTab(tab){
           try{ await db.collection('customers').doc(data.user.id).set({ phone, name, email }); }
           catch(e){ console.error('Could not save profile:', e); }
         }
-        showToast('Account created — you\'re signed in');
+        showToast('Account created. You\'re signed in');
         closeAccountModal();
         await refreshAccountState();
       } else {
@@ -1082,7 +1082,7 @@ function renderAccountTab(tab){
         try{ localStorage.setItem('cifellisPendingSignup', JSON.stringify({ email, name, phone })); }catch(e){}
         const body = document.getElementById('accountTabBody');
         if (body){
-          body.innerHTML = `<p style="font-size:13.5px; line-height:1.5;">Almost there — check <strong>${escapeHtml(email)}</strong> for a confirmation email, then come back and sign in.</p>`;
+          body.innerHTML = `<p style="font-size:13.5px; line-height:1.5;">Almost there. Check <strong>${escapeHtml(email)}</strong> for a confirmation email, then come back and sign in.</p>`;
         }
       }
     });
