@@ -413,6 +413,9 @@
     position:absolute; inset:0; width:100%; height:100%;
     --poster-color:transparent; background:transparent;
     opacity:0; transition:opacity .6s ease; pointer-events:none;
+    /* Scroll-safe pizza: vertical swipes scroll the page (browser handles
+       them); only horizontal drags on the pizza itself spin it. */
+    touch-action:pan-y;
   }
   .hero-art model-viewer.is-loaded{ opacity:1; pointer-events:auto; }
   .hero-art svg.is-hidden{ opacity:0; }
@@ -856,7 +859,7 @@
       </svg>
       <model-viewer id="heroModel" alt="A fresh pepperoni pizza"
         loading="eager" camera-controls interaction-prompt="none" shadow-intensity="1.2" exposure="1"
-        camera-orbit="45deg 60deg 1.6m" field-of-view="25deg" min-camera-orbit="auto 40deg auto" max-camera-orbit="auto 80deg auto">
+        camera-orbit="45deg 60deg 1.6m" field-of-view="25deg" min-camera-orbit="auto 40deg 1.6m" max-camera-orbit="auto 80deg 1.6m">
       </model-viewer>
     </div>
   </div>
