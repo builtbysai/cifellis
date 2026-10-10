@@ -539,7 +539,7 @@ function wireItemButtons(mode){
       const cat = CATEGORIES.find(c=>c.key===btn.getAttribute('data-add-cat'));
       const it = cat.items[+btn.getAttribute('data-add-idx')];
       if (it.soldOut){
-        showToast(mode === 'customer' ? it.name+' is sold out right now' : it.name+' is marked sold out — clear it in Menu Editor to sell it');
+        showToast(mode === 'customer' ? it.name+' is sold out right now' : it.name+' is marked sold out. Clear it in Menu Editor to sell it');
         return;
       }
       addLine({ name: it.name, size: it.size||'', unitPrice: it.price, qty:1, notes:'', ref: { kind:'catalog', categoryKey: cat.key, itemName: it.name } });

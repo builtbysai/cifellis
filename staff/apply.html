@@ -48,7 +48,7 @@
       <path d="M50 22 L78 68 A32 32 0 0 1 22 68 Z" fill="#c22a2f"/>
     </svg>
     <h1>Drive for Cifelli's</h1>
-    <p>Fill this out to apply. A manager reviews every application — you'll be able to sign in once you're approved, not before.</p>
+    <p>Fill this out to apply. A manager reviews every application. You'll be able to sign in once you're approved, not before.</p>
   </div>
 
   <div id="formStep">
@@ -156,7 +156,7 @@
       return;
     }
     if (typeof window.supabase === 'undefined' || !window.SUPABASE_URL || !window.SUPABASE_ANON_KEY){
-      msg.textContent = 'Applications are not connected right now — please try again later or contact the shop directly.';
+      msg.textContent = 'Applications are not connected right now. Please try again later or contact the shop directly.';
       msg.className = 'msg error';
       return;
     }
@@ -183,7 +183,7 @@
       // automatically once they click the confirmation link and land
       // back here signed in (see checkPendingApplication below).
       try{ localStorage.setItem(PENDING_KEY, JSON.stringify(fields)); }catch(e){}
-      msg.textContent = "Check your email to confirm your address, then come back to this page — your application finishes submitting automatically once you're signed in. (If nothing happens when you click the link, come back here and sign in isn't needed — just reopen this page in the same browser.)";
+      msg.textContent = "Check your email to confirm your address, then come back to this page. Your application finishes submitting automatically once you're signed in. (If nothing happens when you click the link, come back here; signing in isn't needed, just reopen this page in the same browser.)";
       msg.className = 'msg ok';
       formStep.style.display = 'none';
       return;

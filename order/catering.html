@@ -49,7 +49,7 @@
       <path d="M50 22 L78 68 A32 32 0 0 1 22 68 Z" fill="#c22a2f"/>
     </svg>
     <h1>Catering &amp; Large Orders</h1>
-    <p>Office party, graduation, game day — tell us what you need and we'll follow up with a quote. This isn't an order yet, just the start of a conversation; nothing here gets sent to the kitchen.</p>
+    <p>Office party, graduation, game day: tell us what you need and we'll follow up with a quote. This isn't an order yet, just the start of a conversation; nothing here gets sent to the kitchen.</p>
   </div>
 
   <div id="formStep">
@@ -107,7 +107,7 @@
       return;
     }
     if (typeof window.supabase === 'undefined' || !window.SUPABASE_URL || !window.SUPABASE_ANON_KEY){
-      msg.textContent = 'Not connected right now — please call the shop directly at (856) 435-8799.';
+      msg.textContent = 'Not connected right now. Please call the shop directly at (856) 435-8799.';
       msg.className = 'msg error';
       return;
     }

@@ -417,7 +417,7 @@
         <button class="role-card" data-role="menu" hidden>
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/><path d="M9 8h8M9 12h8"/></svg>
           <div class="t">Menu Editor</div>
-          <div class="d">Prices, items, and daily specials — changes go live on the kiosk right away. For managers.</div>
+          <div class="d">Prices, items, and daily specials. Changes go live on the kiosk right away. For managers.</div>
         </button>
         <button class="role-card" data-role="storesettings" hidden>
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
@@ -427,7 +427,7 @@
         <button class="role-card" data-role="driverroster" hidden>
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="7" r="4"/><path d="M2 21v-2a4 4 0 0 1 4-4h6a4 4 0 0 1 4 4v2"/><path d="M16 3.13a4 4 0 0 1 0 7.75M21 21v-2a4 4 0 0 0-3-3.87"/></svg>
           <div class="t">Driver Roster</div>
-          <div class="d">Add drivers, their car info, and manage who's active — for managers.</div>
+          <div class="d">Add drivers, their car info, and manage who's active. For managers.</div>
         </button>
         <button class="role-card" data-role="promocodes" hidden>
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41 13.42 20.6a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><circle cx="7.5" cy="7.5" r="1.5" fill="currentColor" stroke="none"/></svg>
@@ -506,7 +506,7 @@
    just means "not paused, nothing overridden". */
 let StoreSettingsState = {
   ordersPaused: false,
-  pauseMessage: "We're not accepting online orders right now — please call the shop to place your order.",
+  pauseMessage: "We're not accepting online orders right now. Please call the shop to place your order.",
   hoursOverrideActive: false,
   hoursOverrideNote: '',
   receiptMessage: "Thank you for your order!\nPay in person at pickup or delivery.",
@@ -790,7 +790,7 @@ function watchPrintJob(id, label){
       } else if (status === 'failed'){
         clearInterval(timer);
         const err = job.data().error;
-        showToast(`${label}: print failed${err ? ' — ' + err : ''}`);
+        showToast(`${label}: print failed${err ? ': ' + err : ''}`);
       }
     }catch(e){ /* a transient check failing isn't worth surfacing -- the next tick tries again */ }
   }, 1500);
@@ -817,7 +817,7 @@ function renderPrintActivity(jobs){
     const color = PRINT_JOB_STATUS_COLORS[j.status] || 'var(--paper-dim)';
     return `<div class="row-between" style="padding:6px 0; border-bottom:1px solid var(--line-on-ink);">
       <span>${escapeHtml(label)} &middot; ${escapeHtml(who)} &middot; ${timeAgo(j.createdAt)}</span>
-      <span style="color:${color}; font-weight:600;">${escapeHtml(status)}${j.status === 'failed' && j.error ? ' — ' + escapeHtml(j.error) : ''}</span>
+      <span style="color:${color}; font-weight:600;">${escapeHtml(status)}${j.status === 'failed' && j.error ? ': ' + escapeHtml(j.error) : ''}</span>
     </div>`;
   }).join('');
 }
@@ -1214,11 +1214,11 @@ async function initAuthGate(){
       if (raw.includes('invalid login credentials')){
         loginError.textContent = "That email or password isn't right. Double-check for typos, or ask an admin to reset your password.";
       } else if (raw.includes('email not confirmed')){
-        loginError.textContent = 'This account still needs email confirmation before it can sign in — check that inbox, or ask an admin to confirm it from the Supabase dashboard.';
+        loginError.textContent = 'This account still needs email confirmation before it can sign in. Check that inbox, or ask an admin to confirm it from the Supabase dashboard.';
       } else if (raw.includes('rate limit') || raw.includes('too many')){
-        loginError.textContent = "Too many attempts too quickly — wait a minute before trying again.";
+        loginError.textContent = "Too many attempts too quickly. Wait a minute before trying again.";
       } else if (error.name === 'TypeError' || raw.includes('fetch') || raw.includes('network')){
-        loginError.textContent = "Couldn't reach the server — check the internet connection and try again.";
+        loginError.textContent = "Couldn't reach the server. Check the internet connection and try again.";
       } else {
         loginError.textContent = "Couldn't sign in: " + (error.message || 'unknown error') + '.';
       }
@@ -1463,7 +1463,7 @@ function editOrderInPos(o){
   const notesEl = document.getElementById('custnotes-pos'); if (notesEl) notesEl.value = o.notes || '';
   const submitBtn = document.getElementById('submit-pos');
   if (submitBtn) submitBtn.textContent = `Save Changes to ${o.ticket || 'Order'}`;
-  showToast(`Editing order ${o.ticket || ''} — changes save to this ticket`);
+  showToast(`Editing order ${o.ticket || ''}: changes save to this ticket`);
 }
 
 function renderQueueRow(o){
@@ -1713,7 +1713,7 @@ function renderKanban(orders){
       assignBtn.disabled = true;
       updateOrder(o.id, { status: 'out_for_delivery', driver: driver.name, driverId: driver.id })
         .then(() => showToast(`Assigned to ${driver.name}`))
-        .catch(() => { assignBtn.disabled = false; showToast('Could not assign — try again'); });
+        .catch(() => { assignBtn.disabled = false; showToast('Could not assign. Try again'); });
     });
   });
 }
@@ -1729,7 +1729,7 @@ function renderTicket(o){
     waitingBlock = `<div class="age">Out for delivery with <b>${escapeHtml(o.driver)}</b></div>`;
   } else if (!next && needsDriver){
     if (App.isAdmin && kitchenActiveDrivers.length){
-      waitingBlock = `<div class="age">Waiting for a driver &mdash; or assign one:</div>
+      waitingBlock = `<div class="age">Waiting for a driver. Or assign one:</div>
         <div style="display:flex; gap:6px; margin-top:6px;">
           <select id="assign-driver-${o.id}" style="flex:1; font-size:12.5px; padding:6px;">
             ${kitchenActiveDrivers.map(d => `<option value="${d.id}">${escapeHtml(d.name||'Unnamed')}</option>`).join('')}
@@ -1749,7 +1749,7 @@ function renderTicket(o){
       ${o.scheduledFor ? `<span class="type" style="background:var(--gold); color:var(--ink);" title="Scheduled order">${escapeHtml(new Date(o.scheduledFor).toLocaleTimeString([], { hour:'numeric', minute:'2-digit' }))}</span>` : ''}
     </div>
     <div class="age">${ageMin} min old</div>
-    <ul>${(o.items||[]).map(it => `<li><b>${it.qty}&times;</b> ${escapeHtml(lineLabel(it))}${it.notes ? ` &mdash; <i>${escapeHtml(it.notes)}</i>` : ''}</li>`).join('')}</ul>
+    <ul>${(o.items||[]).map(it => `<li><b>${it.qty}&times;</b> ${escapeHtml(lineLabel(it))}${it.notes ? `: <i>${escapeHtml(it.notes)}</i>` : ''}</li>`).join('')}</ul>
     ${o.notes ? `<div class="who">Note: ${escapeHtml(o.notes)}</div>` : ''}
     <div class="who">${escapeHtml(o.customerName||'')}${regularBadgeHtml(o.phone)}${o.address ? ', ' + escapeHtml(o.address) : ''}</div>
     ${o.tip ? `<div class="tip-note">+${money(o.tip)} tip</div>` : ''}
@@ -1945,7 +1945,7 @@ function timelineHtml(todayAllOrders, dayStart){
   const dots = todayAllOrders.map(o => {
     const color = o.status === 'cancelled' ? 'var(--bad)' : (o.status === 'completed' ? 'var(--ok)' : 'var(--gold)');
     const time = new Date(o.createdAt||dayStart).toLocaleTimeString([], { hour:'numeric', minute:'2-digit' });
-    const label = `${o.ticket||''} — ${time} — ${statusName(o.status)} — ${money(o.total||0)}`;
+    const label = `${o.ticket||''} · ${time} · ${statusName(o.status)} · ${money(o.total||0)}`;
     return `<div class="timeline-dot" style="left:${pctOfDay(o.createdAt).toFixed(2)}%; background:${color};" title="${escapeHtml(label)}"></div>`;
   }).join('');
   return `
@@ -2301,7 +2301,7 @@ function initDriverRosterView(){
         <button class="btn btn-outline" id="addDriverBtn" type="button">+ Add Driver</button>
       </div>
       <div style="font-size:12.5px; color:var(--paper-dim); margin-bottom:16px;">
-        Two ways someone becomes a driver: add them here directly (their Supabase Auth login and <span class="mono">staff</span> row still need creating separately, see supabase/README.md), or send them to <span class="mono">/staff/apply.html</span> to apply themselves — those show up below as pending until approved.
+        Two ways someone becomes a driver: add them here directly (their Supabase Auth login and <span class="mono">staff</span> row still need creating separately, see supabase/README.md), or send them to <span class="mono">/staff/apply.html</span> to apply themselves. Those show up below as pending until approved.
         ${App.isAdmin ? '' : ' Approving applications requires an admin account; ask one to review these.'}
       </div>
       <div id="pending-section" hidden>
@@ -2376,11 +2376,11 @@ function renderPendingRow(d){
 
 async function approveDriver(d){
   if (!App.isAdmin){ showToast('Only an admin can approve drivers'); return; }
-  if (!d.authUserId){ showToast('This application has no linked sign-in — approve manually in the SQL Editor'); return; }
+  if (!d.authUserId){ showToast('This application has no linked sign-in. Approve manually in the SQL Editor.'); return; }
   try{
     await App.db.collection('staff').doc(d.authUserId).set({ isDriver: true, active: true });
     await App.db.collection('drivers').doc(d.id).update({ approved: true, active: true });
-    showToast(`${d.name || 'Driver'} approved — they can sign in now`);
+    showToast(`${d.name || 'Driver'} approved. They can sign in now.`);
   }catch(e){
     // This used to have no error handling at all -- a failed write here
     // (network blip, RLS denial) threw an uncaught rejection with
@@ -2537,8 +2537,8 @@ function renderMenuEditor(migrated){
   if (!migrated){
     html += `<div style="background:var(--ink-soft); border:1px solid var(--gold); border-radius:10px; padding:14px 16px; margin-bottom:20px; font-size:13.5px; line-height:1.5;">
       The live menu database hasn't been set up yet (see supabase/schema.sql).
-      Editing works below, but <strong>Save Menu will not work until that migration has been run once</strong> —
-      ask whoever manages the site. Showing today's menu so you can preview changes in the meantime.
+      Editing works below, but <strong>Save Menu will not work until that migration has been run once</strong>.
+      Ask whoever manages the site. Showing today's menu so you can preview changes in the meantime.
     </div>`;
   }
   if (readOnly){
@@ -2784,7 +2784,7 @@ async function saveMenuEditor(){
       },
     });
     applyMenuConfig(s); // reflect immediately in this tab's own POS view too
-    statusEl.textContent = 'Saved — live on the kiosk now.';
+    statusEl.textContent = 'Saved. Live on the kiosk now.';
   }catch(e){
     statusEl.textContent = 'Could not save: ' + (e && e.message ? e.message : 'unknown error');
   }
@@ -2935,7 +2935,7 @@ function renderHoursSection(container, weekly, overrides){
       <div id="hrs-overrides-list" style="margin-bottom:14px;">
         ${overrides.length ? overrides.map(o => `
           <div class="row-between" style="padding:8px 0; border-bottom:1px solid var(--line-on-ink); font-size:13px; flex-wrap:wrap; gap:6px;">
-            <span><span class="mono" style="font-weight:700;">${escapeHtml(o.id)}</span> &mdash; ${o.closedAllDay ? 'Closed' : `${(o.openTime||'').slice(0,5)}–${(o.closeTime||'').slice(0,5)}`}${o.note ? ' &mdash; ' + escapeHtml(o.note) : ''}</span>
+            <span><span class="mono" style="font-weight:700;">${escapeHtml(o.id)}</span>: ${o.closedAllDay ? 'Closed' : `${(o.openTime||'').slice(0,5)}–${(o.closeTime||'').slice(0,5)}`}${o.note ? ': ' + escapeHtml(o.note) : ''}</span>
             <button class="btn-ghost" data-remove-override="${escapeHtml(o.id)}" type="button">Remove</button>
           </div>`).join('') : '<div class="cart-empty">No overrides set.</div>'}
       </div>
@@ -3286,7 +3286,7 @@ function subscribeTillReport(shift){
           ${statCard('Avg Ticket', money(report.avgTicket))}
           ${statCard('Expected Drawer', money(shift.startingCash + report.counterCash))}
         </div>
-        ${(report.deliveryCash || report.deliveryCard) ? `<div style="font-size:12.5px; color:var(--paper-dim); margin-top:12px;">Delivery orders this shift: ${money(report.deliveryCash)} cash, ${money(report.deliveryCard)} card &mdash; with drivers, not the drawer.</div>` : ''}
+        ${(report.deliveryCash || report.deliveryCard) ? `<div style="font-size:12.5px; color:var(--paper-dim); margin-top:12px;">Delivery orders this shift: ${money(report.deliveryCash)} cash, ${money(report.deliveryCard)} card. With drivers, not the drawer.</div>` : ''}
         ${report.stillOpenCount ? `<div style="font-size:12.5px; color:var(--warn); margin-top:6px;">${report.stillOpenCount} order(s) from this shift still in progress -- not counted above yet.</div>` : ''}
       `;
     }, () => {
@@ -3377,7 +3377,7 @@ async function closeRegisterShift(){
 function openBugReportModal(){
   showConfirmModal({
     title: 'Report a Bug',
-    body: "Describe what's broken or not working right — this goes straight to the admin, along with which screen you were on.",
+    body: "Describe what's broken or not working right. This goes straight to the admin, along with which screen you were on.",
     withReason: true,
     reasonPlaceholder: 'What happened? Be as specific as you can.',
     confirmLabel: 'Send Report',
@@ -3387,7 +3387,7 @@ function openBugReportModal(){
 
 async function submitBugReport(message){
   const msg = (message || '').trim();
-  if (!msg){ showToast('No description entered — nothing sent.'); return; }
+  if (!msg){ showToast('No description entered. Nothing sent.'); return; }
   const db = App.db || await getDb();
   if (!db){ showToast('Not connected to the database.'); return; }
   try{
@@ -3400,7 +3400,7 @@ async function submitBugReport(message){
       message: msg,
       status: 'open',
     });
-    showToast('Thanks — sent to the admin.');
+    showToast('Thanks. Sent to the admin.');
   }catch(e){
     showToast('Could not send report: ' + (e && e.message ? e.message : 'unknown error'));
   }
@@ -3612,7 +3612,7 @@ function renderPromoCodes(codes, redemptionCounts){
         <div class="row-between" style="padding:10px 0; flex-wrap:wrap; gap:8px; ${i<codes.length-1?'border-bottom:1px solid var(--line-on-ink);':''}">
           <div>
             <span class="mono" style="font-weight:700;">${escapeHtml(c.code)}</span>
-            ${c.label ? ` — ${escapeHtml(c.label)}` : ''}
+            ${c.label ? ` · ${escapeHtml(c.label)}` : ''}
             <div style="font-size:11.5px; color:var(--paper-dim); margin-top:2px;">
               ${c.discountType === 'percent' ? `${c.amount}% off` : `${money(c.amount)} off`}
               ${c.expiresAt ? ` &middot; expires ${new Date(c.expiresAt).toLocaleDateString()}` : ''}
@@ -3914,7 +3914,7 @@ async function initDriverMapView(){
   view.innerHTML = `
     <div class="view-header"><h2>Driver Map</h2></div>
     <div id="driver-map"></div>
-    <div style="font-size:12px; color:var(--paper-dim); margin-top:10px;">Shows drivers currently out on a delivery. A grayed-out pin means that driver's phone hasn't reported in over 2 minutes — they may be offline or between deliveries.</div>`;
+    <div style="font-size:12px; color:var(--paper-dim); margin-top:10px;">Shows drivers currently out on a delivery. A grayed-out pin means that driver's phone hasn't reported in over 2 minutes. They may be offline or between deliveries.</div>`;
   if (typeof L === 'undefined'){
     document.getElementById('driver-map').outerHTML = '<div class="cart-empty">Map library failed to load. Check your internet connection and reload.</div>';
     return;
