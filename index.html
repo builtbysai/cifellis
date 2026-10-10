@@ -413,8 +413,10 @@
     position:absolute; inset:0; width:100%; height:100%;
     --poster-color:transparent; background:transparent;
     opacity:0; transition:opacity .6s ease; pointer-events:none;
-    /* Scroll-safe pizza: vertical swipes scroll the page (browser handles
-       them); only horizontal drags on the pizza itself spin it. */
+    /* Scroll-safe pizza (belt and suspenders): the touch-action="pan-y"
+       attribute on the tag makes model-viewer itself yield vertical drags
+       to native page scroll (only horizontal drags spin the pizza); this
+       host-level rule is a harmless second layer with the same effect. */
     touch-action:pan-y;
   }
   .hero-art model-viewer.is-loaded{ opacity:1; pointer-events:auto; }
@@ -859,6 +861,7 @@
       </svg>
       <model-viewer id="heroModel" alt="A fresh pepperoni pizza"
         loading="eager" camera-controls interaction-prompt="none" shadow-intensity="1.2" exposure="1"
+        disable-zoom touch-action="pan-y"
         camera-orbit="45deg 60deg 1.6m" field-of-view="25deg" min-camera-orbit="auto 40deg 1.6m" max-camera-orbit="auto 80deg 1.6m">
       </model-viewer>
     </div>
@@ -1676,14 +1679,23 @@
     heroSvg.classList.add('is-hidden');
   });
 
-  // auto-rotate is set here rather than as a static attribute so a
-  // visitor with "reduce motion" on (OS-level setting, not something
+  // auto-rotate is set via the attribute (not the JS property) on purpose:
+  // this inline script runs during parsing, before the model-viewer module
+  // executes and upgrades the element. Assigning the .autoRotate property
+  // pre-upgrade creates an own data property that the constructor then
+  // overwrites (this.autoRotate=false), silently killing rotation forever.
+  // Attributes are processed correctly at upgrade time no matter when
+  // they're set, so setAttribute/removeAttribute is the safe path.
+  // A visitor with "reduce motion" on (OS-level setting, not something
   // this site asks about) never gets an endlessly-spinning pizza --
   // live too, via the change listener, in case they flip that setting
   // while the page is already open rather than only checking it once
   // at load.
   var motionQuery = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)');
-  var applyMotionPref = function(){ heroModel.autoRotate = !(motionQuery && motionQuery.matches); };
+  var applyMotionPref = function(){
+    if (motionQuery && motionQuery.matches) heroModel.removeAttribute('auto-rotate');
+    else heroModel.setAttribute('auto-rotate', '');
+  };
   applyMotionPref();
   if (motionQuery){
     if (motionQuery.addEventListener) motionQuery.addEventListener('change', applyMotionPref);
@@ -1702,7 +1714,11 @@
   // splash's own video first claim on bandwidth for its critical first
   // frame, without ever making the model's load depend on scroll
   // position (which is exactly what caused the original deadlock).
-  var startModelLoad = function(){ heroModel.src = 'models/pepperoni-pizza.glb'; };
+  // src is set via setAttribute for the same pre-upgrade reason as
+  // auto-rotate above: on a slow network the model-viewer module may not
+  // have executed yet when this timer fires, and assigning .src pre-upgrade
+  // would shadow the real setter so the model never loads at all.
+  var startModelLoad = function(){ heroModel.setAttribute('src', 'models/pepperoni-pizza.glb'); };
   if ('requestIdleCallback' in window){
     requestIdleCallback(startModelLoad, { timeout: 1500 });
   } else {
