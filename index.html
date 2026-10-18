@@ -375,7 +375,10 @@
     overflow:hidden;
   }
   .hero .wrap{
-    display:grid; grid-template-columns: 1.15fr .85fr; gap:48px; align-items:center;
+    display:grid;
+    grid-template-columns:minmax(0,1.08fr) minmax(0,.92fr);
+    gap:clamp(32px,4vw,48px);
+    align-items:center;
   }
   .hero-eyebrow{ margin-bottom:14px; }
   .hero h1{
@@ -407,24 +410,59 @@
   }
   .ticket-strip .cell .v{ font-weight:700; font-size:14.5px; }
 
-  .hero-art{ position:relative; justify-self:center; width:100%; max-width:440px; aspect-ratio:1/1; }
-  .hero-art svg{ width:100%; height:auto; transition:opacity .5s ease; }
-  .hero-art model-viewer{
+  /* One square stage for both renderers. Its size is controlled by the
+     layout, not by model loading, so the SVG-to-3D handoff never shifts
+     the hero. The instruction occupies a reserved line below the stage. */
+  .hero-art{
+    position:relative;
+    justify-self:center;
+    width:min(100%,490px);
+    min-width:0;
+  }
+  .hero-art-stage{ position:relative; width:100%; aspect-ratio:1; }
+  .hero-art-stage svg{
+    position:absolute; inset:0; width:100%; height:100%;
+    transition:opacity .5s ease;
+  }
+  .hero-art-stage model-viewer{
     position:absolute; inset:0; width:100%; height:100%;
     --poster-color:transparent; background:transparent;
     opacity:0; transition:opacity .6s ease; pointer-events:none;
-    /* Scroll-safe pizza (belt and suspenders): the touch-action="pan-y"
-       attribute on the tag makes model-viewer itself yield vertical drags
-       to native page scroll (only horizontal drags spin the pizza); this
-       host-level rule is a harmless second layer with the same effect. */
+    /* Preserve vertical page scrolling on touchscreens. Only horizontal
+       drags are used to turn the pizza. */
     touch-action:pan-y;
   }
-  .hero-art model-viewer.is-loaded{ opacity:1; pointer-events:auto; }
-  .hero-art svg.is-hidden{ opacity:0; }
+  .hero-art-stage model-viewer.is-loaded{ opacity:1; pointer-events:auto; }
+  .hero-art-stage svg.is-hidden{ opacity:0; }
+  .hero-art-stage model-viewer:focus-visible{
+    outline:2px solid var(--gold); outline-offset:2px;
+  }
+  .hero-art-hint{
+    min-height:19px; margin:6px 0 0;
+    font:500 11px/19px "IBM Plex Mono",monospace;
+    text-align:center; letter-spacing:.08em; text-transform:uppercase;
+    color:var(--text-dim); opacity:0; visibility:hidden;
+    transition:opacity .25s ease;
+  }
+  .hero-art.is-interactive .hero-art-hint{ opacity:1; visibility:visible; }
 
   @media (max-width:900px){
-    .hero .wrap{ grid-template-columns:1fr; }
-    .hero-art{ order:-1; width:70%; margin:0 auto; }
+    .hero .wrap{ grid-template-columns:minmax(0,1fr); gap:30px; }
+    .hero-art{ order:-1; width:min(76%,420px); margin-inline:auto; }
+  }
+  @media (max-width:560px){
+    .hero{ padding:26px 0 42px; }
+    .hero .wrap{ gap:20px; }
+    .hero-art{ width:min(100%,360px); }
+  }
+  /* A short landscape viewport needs a side-by-side composition rather
+     than a full-width pizza pushing the restaurant content far below. */
+  @media (orientation:landscape) and (max-height:550px) and (min-width:640px) and (max-width:900px){
+    .hero{ padding:26px 0 38px; }
+    .hero .wrap{ grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr); gap:24px; }
+    .hero-art{ order:0; width:100%; max-width:340px; }
+    .hero .cta-row{ margin-top:20px; }
+    .ticket-strip{ margin-top:24px; }
   }
 
   /* ---------- section shell ---------- */
@@ -754,6 +792,7 @@
     </div>
 
     <div class="hero-art">
+      <div class="hero-art-stage">
       <svg id="heroSvg" viewBox="0 0 420 420" role="img" aria-label="Illustration of a fresh pepperoni pizza">
         <defs>
           <filter id="softBlur" x="-50%" y="-50%" width="200%" height="200%">
@@ -859,11 +898,14 @@
           <path d="M195 130 q-11 -11 0 -18 q11 7 0 18 Z" transform="rotate(-10 195 130)"/>
         </g>
       </svg>
-      <model-viewer id="heroModel" alt="A fresh pepperoni pizza"
+      <model-viewer id="heroModel" alt="Interactive 3D pepperoni pizza. Drag side to side or use arrow keys to rotate."
+        aria-describedby="heroPizzaHint"
         loading="eager" camera-controls interaction-prompt="none" shadow-intensity="1.2" exposure="1"
-        disable-zoom touch-action="pan-y"
-        camera-orbit="45deg 60deg 1.6m" field-of-view="25deg" min-camera-orbit="auto 40deg 1.6m" max-camera-orbit="auto 80deg 1.6m">
+        disable-zoom touch-action="pan-y" rotation-per-second="9deg" auto-rotate-delay="6000"
+        camera-orbit="35deg 50deg 1.5m" field-of-view="25deg" min-camera-orbit="auto 30deg 1.5m" max-camera-orbit="auto 76deg 1.5m">
       </model-viewer>
+      </div>
+      <p class="hero-art-hint" id="heroPizzaHint">Drag left or right to turn</p>
     </div>
   </div>
 </section>
@@ -1674,9 +1716,11 @@
   var heroModel = document.getElementById('heroModel');
   var heroSvg = document.getElementById('heroSvg');
   if (!heroModel || !heroSvg) return;
+  var heroArt = heroModel.closest('.hero-art');
   heroModel.addEventListener('load', function(){
     heroModel.classList.add('is-loaded');
     heroSvg.classList.add('is-hidden');
+    if (heroArt) heroArt.classList.add('is-interactive');
   });
 
   // auto-rotate is set via the attribute (not the JS property) on purpose:
